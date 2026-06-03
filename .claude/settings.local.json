@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python main.py --list)",
+      "Bash(python main.py --scenario haunted_library)",
+      "Bash(pip install *)",
+      "Bash(code /c/Users/SHLBJ/Desktop/llm-agent-world)",
+      "Bash(python -c \"from engine.tools import execute_tool; print\\('OK'\\)\")",
+      "Bash(python -c \"from engine.world_engine import WorldEngine; print\\('OK'\\)\")",
+      "Bash(python -c \"from engine.agent import Agent; print\\('OK'\\)\")",
+      "Bash(python -c ' *)",
+      "Bash(python -m pytest tests/ -v)",
+      "Bash(python -m unittest discover -s tests -v)",
+      "Bash(python -m unittest discover tests -v)",
+      "Bash(python -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('won:', d['won'], 'steps:', d['total_steps'], 'elapsed:', d['elapsed_seconds']\\)\")"
+    ]
+  }
+}
