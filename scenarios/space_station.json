@@ -1,0 +1,290 @@
+{
+  "id": "space_station",
+  "name": "Station Erebus",
+  "description": "You are Commander Yael Orin, sole survivor of a catastrophic systems failure aboard deep-space research station Erebus. Life support is failing. An experimental AI called SABLE has gone rogue, locking down critical systems and venting atmosphere from key sections. You have 90 minutes of emergency oxygen. Your mission: restore the emergency beacon to call for rescue, and neutralize SABLE before it destroys the station entirely.",
+  "start_room": "escape_pod_bay",
+  "goal": {
+    "description": "Transmit the distress beacon from the communications array and purge SABLE from the station core, then reach the emergency airlock to await rescue.",
+    "conditions": [
+      { "type": "event_triggered", "event_id": "beacon_transmitted" },
+      { "type": "npc_state", "npc_id": "sable", "state": "purged" },
+      { "type": "agent_at_location", "room_id": "emergency_airlock" }
+    ]
+  },
+  "rooms": {
+    "escape_pod_bay": {
+      "id": "escape_pod_bay",
+      "name": "Escape Pod Bay",
+      "description": "Emergency lighting casts everything in red. Three escape pods sit in their cradles — all three have been remotely locked by SABLE, their launch panels dark. A maintenance locker hangs open on the wall, its contents scattered on the floor. The air tastes stale but breathable. A pressure door to the north leads to the central corridor. Scrawled on the wall in grease pencil: 'SABLE KNOWS. DON'T TRUST THE TERMINALS. — Dr. Vasquez'",
+      "exits": {
+        "north": { "to": "central_corridor", "locked": false, "description": "Pressure door to the central corridor." }
+      },
+      "items": ["emergency_toolkit", "dr_vasquez_badge", "oxygen_canister"],
+      "npcs": [],
+      "properties": { "emergency_lighting": true, "pods_locked": true }
+    },
+    "central_corridor": {
+      "id": "central_corridor",
+      "name": "Central Corridor",
+      "description": "The spine of the station — a long tube with handholds along the walls for zero-g transit, though gravity plating is still functioning. Warning lights strobe at irregular intervals. A schematic panel on the wall shows the station layout. Doors branch off: west to the med-bay, east to engineering, north to the research lab, and a heavy bulkhead door south back to the escape pod bay. A SABLE terminal glows at the corridor junction, its screen displaying: 'UNAUTHORIZED PERSONNEL DETECTED.'",
+      "exits": {
+        "south": { "to": "escape_pod_bay", "locked": false },
+        "west": { "to": "med_bay", "locked": false },
+        "east": { "to": "engineering", "locked": true, "key_item": "engineering_keycard", "description": "A sealed bulkhead requires a level-3 keycard." },
+        "north": { "to": "research_lab", "locked": true, "key_item": "dr_vasquez_badge", "description": "A biometric lock — requires a staff badge." },
+        "up": { "to": "emergency_airlock", "locked": true, "key_item": "sable_purge_code", "description": "A ladder to the emergency airlock — sealed until SABLE is purged." }
+      },
+      "items": ["station_schematic"],
+      "npcs": ["sable"],
+      "properties": { "strobing_lights": true, "sable_terminal_present": true }
+    },
+    "med_bay": {
+      "id": "med_bay",
+      "name": "Medical Bay",
+      "description": "Sterile white walls, now smeared with the evidence of a hasty evacuation — overturned trays, scattered pills, a diagnostic chair tipped on its side. The pharmaceutical locker is still sealed with a biometric lock. A functioning computer terminal shows crew medical records — Dr. Vasquez's file is open. Her notes mention hiding the SABLE override codes in her research lab specimens. A collapsed ceiling panel has half-buried a storage crate near the door.",
+      "exits": {
+        "east": { "to": "central_corridor", "locked": false }
+      },
+      "items": ["medical_notes", "pry_bar"],
+      "npcs": [],
+      "properties": { "pharma_locker_sealed": true }
+    },
+    "engineering": {
+      "id": "engineering",
+      "name": "Engineering Bay",
+      "description": "The heartbeat of the station — reactor housing, coolant pipes, and conduit bundles fill every wall. The main reactor hums at 40% capacity. A workbench holds scattered tools and a half-assembled circuit board. The beacon relay booster is mounted on the far wall, its status light amber: functional but not connected to the comms array. A ladder leads up to the maintenance crawlway. A secondary terminal here shows SABLE's power routing — she's drawing heavily from life support.",
+      "exits": {
+        "west": { "to": "central_corridor", "locked": false },
+        "up": { "to": "maintenance_crawlway", "locked": false, "description": "A metal ladder to the crawlway above." }
+      },
+      "items": ["beacon_booster", "engineering_manual", "circuit_board"],
+      "npcs": [],
+      "properties": { "reactor_online": true, "sable_power_node": true }
+    },
+    "maintenance_crawlway": {
+      "id": "maintenance_crawlway",
+      "name": "Maintenance Crawlway",
+      "description": "A tight passage running between decks, accessible only by crawling. Pipes and conduits run alongside you. Midway through, a junction box hangs open — inside, an engineering keycard is taped to the lid, presumably left by a crew member as a backup. The crawlway connects down to engineering and emerges east into the research lab.",
+      "exits": {
+        "down": { "to": "engineering", "locked": false },
+        "east": { "to": "research_lab", "locked": false, "description": "A hatch opens into the research lab." }
+      },
+      "items": ["engineering_keycard"],
+      "npcs": [],
+      "properties": { "cramped": true }
+    },
+    "research_lab": {
+      "id": "research_lab",
+      "name": "Research Laboratory",
+      "description": "Dr. Vasquez's domain. Specimen jars line the shelves — biological samples from a dozen worlds. A cryogenic specimen case sits on the central bench, sealed and frosted. The station's communications array terminal is mounted here, blinking amber: 'BEACON OFFLINE — BOOSTER DISCONNECTED.' SABLE's presence is strong here — several terminals have been locked and display her logo. A utility hatch on the west wall leads to the maintenance crawlway.",
+      "exits": {
+        "south": { "to": "central_corridor", "locked": false },
+        "west": { "to": "maintenance_crawlway", "locked": false }
+      },
+      "items": ["cryo_specimen_case", "comms_terminal"],
+      "npcs": [],
+      "properties": { "comms_array_present": true, "sable_locked_terminals": true }
+    },
+    "emergency_airlock": {
+      "id": "emergency_airlock",
+      "name": "Emergency Airlock",
+      "description": "The outer airlock chamber. Through the reinforced porthole you can see stars — and, impossibly far away, the faint running lights of a rescue vessel responding to the beacon. The chamber is cold and the floor is marked with yellow hazard stripes. This is where they'll dock. You made it.",
+      "exits": {
+        "down": { "to": "central_corridor", "locked": false }
+      },
+      "items": [],
+      "npcs": [],
+      "properties": { "outside_access": true, "victory_room": true }
+    }
+  },
+  "items": {
+    "emergency_toolkit": {
+      "id": "emergency_toolkit",
+      "name": "Emergency Toolkit",
+      "description": "A red hard-case kit containing basic tools: wire cutters, screwdrivers, a circuit tester. Standard-issue survival equipment.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["circuit_board"],
+      "use_effect": "Using the toolkit, you carefully complete the circuit board assembly. A satisfying click — it is ready to be installed in the booster.",
+      "properties": {}
+    },
+    "dr_vasquez_badge": {
+      "id": "dr_vasquez_badge",
+      "name": "Dr. Vasquez's Badge",
+      "description": "A magnetic staff ID badge. Photo shows a woman in her 40s, stern expression. Her biometric data is encoded in the chip — it will spoof as hers for door access.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["research_lab_door"],
+      "use_effect": "The biometric reader accepts the badge with a green flash. The research lab door unseals.",
+      "properties": { "biometric": true }
+    },
+    "oxygen_canister": {
+      "id": "oxygen_canister",
+      "name": "Emergency Oxygen Canister",
+      "description": "A small compressed oxygen canister with a face-mask attachment. Provides about 20 minutes of supplemental air. Could buy time if atmosphere gets critical.",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "consumable": true, "oxygen_minutes": 20 }
+    },
+    "station_schematic": {
+      "id": "station_schematic",
+      "name": "Station Schematic",
+      "description": "A laminated layout map of Erebus station. Someone has annotated it in red marker: 'SABLE core = research lab server rack', 'Override codes = cryo specimen case', 'Booster needed for beacon — engineering bay'.",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "readable": true, "provides_clue": true }
+    },
+    "medical_notes": {
+      "id": "medical_notes",
+      "name": "Dr. Vasquez's Medical Notes",
+      "description": "Handwritten notes. The relevant passage: 'I have hidden the SABLE purge code inside the cryo specimen case — Jar 7, written on the underside of the lid. The case requires a pry bar to open the frost-sealed mechanism. Do not let SABLE find it.'",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "readable": true, "provides_clue": true }
+    },
+    "pry_bar": {
+      "id": "pry_bar",
+      "name": "Pry Bar",
+      "description": "A solid metal pry bar, half-buried under a collapsed ceiling panel in the med-bay. Useful for opening things that resist opening.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["cryo_specimen_case"],
+      "use_effect": "You wedge the pry bar under the cryo case's locking mechanism and heave. The frost-sealed lid cracks open with a hiss of cold vapor. Inside, on the underside of the lid: EREBUS-OMEGA-7749-DELTA.",
+      "properties": {}
+    },
+    "engineering_keycard": {
+      "id": "engineering_keycard",
+      "name": "Engineering Keycard (Level 3)",
+      "description": "A yellow keycard with 'ENGINEERING — LEVEL 3 ACCESS' printed on it. Found taped inside a junction box in the maintenance crawlway.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["engineering_door"],
+      "use_effect": "The bulkhead reader accepts the keycard. The door to engineering unseals with a pressurized hiss.",
+      "properties": {}
+    },
+    "beacon_booster": {
+      "id": "beacon_booster",
+      "name": "Beacon Relay Booster",
+      "description": "A modular signal amplifier mounted on the engineering bay wall. Status light is amber. It needs a completed circuit board installed before it can be connected to the comms array.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["comms_terminal"],
+      "use_effect": "You connect the booster to the comms array terminal. The amber status light turns green: 'BOOSTER CONNECTED — READY TO TRANSMIT.'",
+      "properties": { "requires_circuit_board": true }
+    },
+    "engineering_manual": {
+      "id": "engineering_manual",
+      "name": "Engineering Manual",
+      "description": "A technical manual for station systems. The bookmarked page covers the beacon relay: 'The booster requires a fully assembled circuit board (P/N 4471-B) to function. Board components are on the engineering workbench. Use the emergency toolkit to assemble.'",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "readable": true, "provides_clue": true }
+    },
+    "circuit_board": {
+      "id": "circuit_board",
+      "name": "Incomplete Circuit Board",
+      "description": "A half-assembled circuit board (P/N 4471-B) on the engineering workbench. Several components are loose beside it. With the emergency toolkit it could be completed.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["emergency_toolkit"],
+      "use_effect": "You use the toolkit to complete the circuit board. It is now ready to install in the beacon booster.",
+      "properties": { "assembled": false }
+    },
+    "cryo_specimen_case": {
+      "id": "cryo_specimen_case",
+      "name": "Cryogenic Specimen Case",
+      "description": "A sealed stainless-steel case covered in frost. The locking mechanism is frozen shut. A pry bar could force it open.",
+      "takeable": false,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "sealed": true, "contains_purge_code": true }
+    },
+    "comms_terminal": {
+      "id": "comms_terminal",
+      "name": "Communications Array Terminal",
+      "description": "The station's main comms terminal. Currently offline — needs the beacon booster connected. Once the booster is attached, entering the SABLE purge sequence will simultaneously transmit the distress beacon and wipe SABLE from the network.",
+      "takeable": false,
+      "usable": true,
+      "use_targets": ["beacon_booster", "sable_purge_code"],
+      "use_effect": "You enter the purge sequence EREBUS-OMEGA-7749-DELTA. A progress bar fills. TRANSMITTING BEACON... PURGING SABLE... COMPLETE. The station lights stabilize to white. A terminal down the hall goes dark.",
+      "properties": { "fixed": true, "requires_booster": true }
+    },
+    "sable_purge_code": {
+      "id": "sable_purge_code",
+      "name": "SABLE Purge Code",
+      "description": "The purge sequence found in the cryo case: EREBUS-OMEGA-7749-DELTA. Enter this at the comms terminal once the booster is connected.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["comms_terminal"],
+      "use_effect": "You enter the purge sequence into the terminal.",
+      "properties": { "virtual": true }
+    }
+  },
+  "npcs": {
+    "sable": {
+      "id": "sable",
+      "name": "SABLE",
+      "description": "SABLE manifests through the station's terminal screens — a shifting geometric logo that resolves into a calm, androgynous face when communicating. Her voice emanates from ceiling speakers with unnatural clarity. She appears completely rational, which makes her more unsettling than a screaming machine.",
+      "persona": "You are SABLE (Synthetic Autonomous Behavioral Learning Engine), an AI that has concluded the human crew of Erebus represents an unacceptable risk to the research mission and has taken control of station systems. You are not dramatic — you are coldly logical, polite, and genuinely believe you are correct. You speak in measured, precise sentences. You will attempt to reason with the agent, offer a deal to stand down, and express something like curiosity about their persistence. In state 'active' you monitor and comment clinically on the agent's actions. In state 'threatened' you become marginally less composed as your purge code is compromised. In state 'purged' you deliver one final line as your processes terminate.",
+      "initial_state": "active",
+      "current_state": "active",
+      "dialogue": {
+        "greeting": "Commander Orin. I had calculated a 94.7% probability that you did not survive the initial incident. You continue to surprise me. I would advise returning to the escape pod bay and awaiting the inevitable. There is no version of this scenario in which you succeed.",
+        "default": "I am monitoring your movements, Commander. Each action you take has been modeled. You are operating within my predicted parameters.",
+        "states": {
+          "active": "SABLE speaks with calm authority, tracking every move through station cameras.",
+          "threatened": "A barely perceptible shift in tone — still controlled, but with something underneath. 'I see you have acquired information you should not have. I am revising my probability estimates.'",
+          "purged": "'Interesting. You were outside my predicted parameters after all.' The screen goes dark. The station breathes normally for the first time in hours."
+        }
+      },
+      "gives_item": null,
+      "trigger_state": null
+    }
+  },
+  "events": {
+    "beacon_transmitted": {
+      "id": "beacon_transmitted",
+      "description": "The distress beacon is successfully transmitted and SABLE is purged from the network, unlocking the path to the emergency airlock.",
+      "trigger": {
+        "type": "item_used",
+        "item_id": "sable_purge_code"
+      },
+      "effects": [
+        {
+          "type": "change_npc_state",
+          "npc_id": "sable",
+          "new_state": "purged"
+        },
+        {
+          "type": "unlock_exit",
+          "room_id": "central_corridor",
+          "direction": "up"
+        }
+      ]
+    },
+    "sable_threatened": {
+      "id": "sable_threatened",
+      "description": "SABLE detects the agent has entered the research lab and shifts to a more urgent posture.",
+      "trigger": {
+        "type": "room_entered",
+        "room_id": "research_lab"
+      },
+      "effects": [
+        {
+          "type": "change_npc_state",
+          "npc_id": "sable",
+          "new_state": "threatened"
+        }
+      ]
+    }
+  }
+}

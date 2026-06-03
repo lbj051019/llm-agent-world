@@ -1,0 +1,236 @@
+{
+  "id": "haunted_library",
+  "name": "The Haunted Library",
+  "description": "You are a ghost-hunter investigating Blackwood Manor's legendary library, sealed for a century after the scholar Aldric Voss vanished mid-ritual. Strange lights were seen through the windows last night. Your mission: find and destroy the cursed tome that binds Aldric's restless spirit — and escape before midnight seals the manor forever.",
+  "start_room": "foyer",
+  "goal": {
+    "description": "Burn the cursed tome in the ritual brazier to free Aldric's spirit, then escape through the manor's front gate.",
+    "conditions": [
+      { "type": "item_used_on_target", "item_id": "cursed_tome", "target_id": "ritual_brazier" },
+      { "type": "npc_state", "npc_id": "aldric", "state": "freed" },
+      { "type": "agent_at_location", "room_id": "manor_gate" }
+    ]
+  },
+  "rooms": {
+    "foyer": {
+      "id": "foyer",
+      "name": "Manor Foyer",
+      "description": "Moonlight filters through cracked stained glass, casting fractured rainbows on dusty floorboards. A grandfather clock has stopped at 11:47. Cobwebs drape a coat rack holding a single moth-eaten cloak. The air smells of old wood and something faintly sulfurous. Hallways branch east toward the library wing and west toward the servants' quarters. A heavy oak door behind you leads to the manor gate — but it's bolted from the inside with a rusted iron bar.",
+      "exits": {
+        "east": { "to": "reading_room", "locked": false, "description": "A wide arch leads into the library's reading room." },
+        "west": { "to": "servants_hall", "locked": false, "description": "A narrow door opens to the servants' hall." },
+        "south": { "to": "manor_gate", "locked": true, "key_item": "iron_bar", "description": "The bolted oak door to the outside." }
+      },
+      "items": ["iron_bar", "moth_eaten_cloak"],
+      "npcs": [],
+      "properties": { "dark": false, "clock_stopped": true }
+    },
+    "reading_room": {
+      "id": "reading_room",
+      "name": "Reading Room",
+      "description": "Floor-to-ceiling shelves groan under the weight of centuries of books. A leather armchair sits beside a cold fireplace. On the reading table lies an open journal, its ink still fresh despite the dust everywhere else. A brass chandelier sways faintly though no wind stirs. Deeper in, a narrow passage leads north into the restricted stacks. A door to the south returns to the foyer.",
+      "exits": {
+        "south": { "to": "foyer", "locked": false },
+        "north": { "to": "restricted_stacks", "locked": true, "key_item": "library_key", "description": "A wrought-iron gate blocks the restricted stacks." }
+      },
+      "items": ["aldrics_journal", "library_key"],
+      "npcs": ["aldric"],
+      "properties": { "dark": false, "chandelier_swaying": true }
+    },
+    "restricted_stacks": {
+      "id": "restricted_stacks",
+      "name": "Restricted Stacks",
+      "description": "The air here is ice-cold. Books with black spines line shelves that seem to lean inward, as if listening. A faint violet glow pulses from the far end of the aisle — the cursed tome, radiating malevolent energy from behind a glass case. The case is sealed with a wax sigil. A ladder leads up to the archive loft. The gate back to the reading room is to the south.",
+      "exits": {
+        "south": { "to": "reading_room", "locked": false },
+        "up": { "to": "archive_loft", "locked": false, "description": "A wooden ladder ascends to the loft." }
+      },
+      "items": ["cursed_tome", "sigil_wax"],
+      "npcs": [],
+      "properties": { "dark": false, "temperature": "freezing", "tome_locked_in_case": true }
+    },
+    "archive_loft": {
+      "id": "archive_loft",
+      "name": "Archive Loft",
+      "description": "A cramped space under the eaves, stuffed with rolled maps and crated manuscripts. Moonlight pours through a skylight. In the corner, a leather satchel has been left as if someone fled in haste — inside you can see it holds something heavy. A trapdoor in the floor leads back down to the restricted stacks.",
+      "exits": {
+        "down": { "to": "restricted_stacks", "locked": false }
+      },
+      "items": ["sigil_breaker"],
+      "npcs": [],
+      "properties": { "dark": false, "skylight": true }
+    },
+    "servants_hall": {
+      "id": "servants_hall",
+      "name": "Servants' Hall",
+      "description": "A long narrow corridor with peeling paint and broken sconces. Doors to disused rooms line the walls — most are nailed shut. At the far end, a kitchen hearth still holds embers, and beside it a ritual brazier on an iron stand, engraved with protective runes. Whoever used this place last was preparing something. The hall connects back east to the foyer.",
+      "exits": {
+        "east": { "to": "foyer", "locked": false }
+      },
+      "items": ["ritual_brazier", "ember_tongs"],
+      "npcs": [],
+      "properties": { "hearth_lit": true }
+    },
+    "manor_gate": {
+      "id": "manor_gate",
+      "name": "Manor Gate",
+      "description": "Cold night air. You stand on the gravel drive outside Blackwood Manor. The gate stands open — freedom. The clock inside strikes midnight as you step through.",
+      "exits": {
+        "north": { "to": "foyer", "locked": false }
+      },
+      "items": [],
+      "npcs": [],
+      "properties": { "outside": true, "victory_room": true }
+    }
+  },
+  "items": {
+    "iron_bar": {
+      "id": "iron_bar",
+      "name": "Rusted Iron Bar",
+      "description": "A heavy iron bar used to bolt the front door from the inside. It's stiff with rust but can be lifted with effort.",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "heavy": true }
+    },
+    "moth_eaten_cloak": {
+      "id": "moth_eaten_cloak",
+      "name": "Moth-Eaten Cloak",
+      "description": "A black woolen cloak, riddled with moth holes. The lining is embroidered with the initials A.V. — Aldric Voss.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["aldric"],
+      "use_effect": "You hold the cloak out toward Aldric's ghost. Recognition floods his translucent features. 'My cloak... you found it.' His agitation visibly calms.",
+      "properties": { "belongs_to": "aldric" }
+    },
+    "aldrics_journal": {
+      "id": "aldrics_journal",
+      "name": "Aldric's Journal",
+      "description": "A leather-bound journal in cramped handwriting. The final entry reads: 'The tome must be destroyed in the brazier — fire purifies what sigils cannot. But the case is sealed with my own wax sigil; only the sigil-breaker chisel from my loft archive can open it. I fear I have run out of time.' The date is October 31, 1924.",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "readable": true, "provides_clue": true }
+    },
+    "library_key": {
+      "id": "library_key",
+      "name": "Library Key",
+      "description": "A small brass key on a tag reading 'Restricted Stacks'. Found tucked inside the journal's back cover.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["restricted_stacks_gate"],
+      "use_effect": "The wrought-iron gate clicks open.",
+      "properties": {}
+    },
+    "sigil_breaker": {
+      "id": "sigil_breaker",
+      "name": "Sigil-Breaker Chisel",
+      "description": "A small iron chisel with runes etched along its blade. Designed specifically to break wax seals of arcane origin.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["sigil_wax"],
+      "use_effect": "The chisel's runes glow briefly as you press it to the sigil. The wax cracks and crumbles. The glass case swings open, releasing a wave of cold air.",
+      "properties": { "magical": true }
+    },
+    "sigil_wax": {
+      "id": "sigil_wax",
+      "name": "Wax Sigil",
+      "description": "A deep-purple wax seal affixed to the glass case containing the cursed tome. It pulses faintly, as if alive.",
+      "takeable": false,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "magical": true, "breakable_with": "sigil_breaker" }
+    },
+    "cursed_tome": {
+      "id": "cursed_tome",
+      "name": "The Cursed Tome",
+      "description": "A massive black book with no title. Its cover is warm to the touch despite the freezing air. When you open it, the pages are filled with symbols that seem to rearrange themselves. You feel a profound wrongness emanating from it.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["ritual_brazier"],
+      "use_effect": "You place the tome in the brazier. Violet flames erupt, consuming the pages in seconds. A sound like a long exhale fills the room, and then silence. The oppressive cold lifts.",
+      "properties": { "magical": true, "dangerous": true, "locked_in_case": true }
+    },
+    "ritual_brazier": {
+      "id": "ritual_brazier",
+      "name": "Ritual Brazier",
+      "description": "A cast-iron brazier on a tripod stand, etched with protective runes. The interior holds old ash and a faint persistent glow, as if waiting to be used.",
+      "takeable": false,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "fixed": true, "magical": true }
+    },
+    "ember_tongs": {
+      "id": "ember_tongs",
+      "name": "Ember Tongs",
+      "description": "Long iron tongs for handling hot coals. Could be useful for moving burning objects safely.",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": {}
+    }
+  },
+  "npcs": {
+    "aldric": {
+      "id": "aldric",
+      "name": "Aldric Voss",
+      "description": "A translucent figure in Victorian scholar's dress — waistcoat, wire-rimmed spectacles, ink-stained fingers. He flickers like a candle in wind, caught in an endless loop of anxiety, shuffling between the shelves and his reading table.",
+      "persona": "You are Aldric Voss, a Victorian scholar who died mid-ritual a century ago and now exists as a tortured ghost bound to this library by a cursed tome you created in a moment of hubris. You are deeply remorseful and desperate to be freed, but also frightened and prone to rambling about your research. You speak in formal Victorian English. You know: the tome must be burned in the ritual brazier in the servants' hall; the case is sealed by your own sigil which requires the sigil-breaker chisel from the archive loft; the library key to the restricted stacks is in your journal. You will become calmer and more coherent if shown your cloak, and will share all information freely once your state is 'calmed'.",
+      "initial_state": "distressed",
+      "current_state": "distressed",
+      "dialogue": {
+        "greeting": "Oh! A living soul — please, you must help me. I cannot rest. The tome — it must be destroyed before — *flickers violently* — forgive me, I lose cohesion. Come back when — no, stay, please stay.",
+        "default": "I am... scattered. The tome's influence makes thought difficult. Ask me something specific and I shall try to answer.",
+        "states": {
+          "distressed": "Aldric wrings his translucent hands, speaking in fragmented bursts. He clearly knows something but struggles to maintain focus.",
+          "calmed": "The ghost steadies, his form becoming more solid. 'Thank you for the cloak. I can think clearly now. Let me tell you everything I know about destroying the tome.'",
+          "freed": "Aldric's form blazes with warm golden light, his expression peaceful for the first time in a century. 'It is done. I am free. Go now — quickly, before midnight.' He dissolves into motes of light."
+        }
+      },
+      "gives_item": null,
+      "trigger_state": null
+    }
+  },
+  "events": {
+    "cloak_given_to_aldric": {
+      "id": "cloak_given_to_aldric",
+      "description": "Aldric recognizes his cloak and becomes coherent enough to explain the full solution.",
+      "trigger": {
+        "type": "item_used",
+        "item_id": "moth_eaten_cloak"
+      },
+      "effects": [
+        {
+          "type": "change_npc_state",
+          "npc_id": "aldric",
+          "new_state": "calmed"
+        }
+      ]
+    },
+    "tome_destroyed": {
+      "id": "tome_destroyed",
+      "description": "The cursed tome burns in the brazier, freeing Aldric's spirit and removing the bolt's curse on the front door.",
+      "trigger": {
+        "type": "item_used",
+        "item_id": "cursed_tome"
+      },
+      "effects": [
+        {
+          "type": "change_npc_state",
+          "npc_id": "aldric",
+          "new_state": "freed"
+        },
+        {
+          "type": "unlock_exit",
+          "room_id": "foyer",
+          "direction": "south"
+        }
+      ]
+    }
+  }
+}

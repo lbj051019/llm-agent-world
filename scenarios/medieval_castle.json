@@ -1,0 +1,342 @@
+{
+  "id": "medieval_castle",
+  "name": "The Siege of Ironhold",
+  "description": "You are Mira, a spy for the Resistance, infiltrating Castle Ironhold — seat of the tyrant Lord Caval. The castle falls at dawn unless you can do three things before the sun rises: forge a royal pardon that will prevent the siege and save thousands of lives, steal the evidence of Caval's treason that will legitimize the Resistance's cause, and escape through the castle's secret passage before the guard rotation locks the keep.",
+  "start_room": "castle_sewer",
+  "goal": {
+    "description": "Forge the royal pardon using the Chancellor's seal, retrieve the treason documents from Caval's study, and escape through the hidden passage in the chapel.",
+    "conditions": [
+      { "type": "item_in_inventory", "item_id": "forged_pardon" },
+      { "type": "item_in_inventory", "item_id": "treason_documents" },
+      { "type": "agent_at_location", "room_id": "secret_passage_exit" }
+    ]
+  },
+  "rooms": {
+    "castle_sewer": {
+      "id": "castle_sewer",
+      "name": "Castle Sewer",
+      "description": "You drop through a grate into ankle-deep cold water. The stench is overwhelming. Torchlight from above creates rippling shadows on the curved stone walls. Iron rungs lead back up to the street — no going back that way; you've pulled the grate shut behind you. Ahead, the sewer channel splits: a rusted maintenance door to the east leads toward the servants' undercroft, and a low crawlway north runs under the chapel.",
+      "exits": {
+        "east": { "to": "servants_undercroft", "locked": false, "description": "A rusted door, unlocked, leads into the undercroft." },
+        "north": { "to": "chapel_crawlway", "locked": false, "description": "A low tunnel runs north under the chapel floor." }
+      },
+      "items": ["spy_kit", "sewer_map"],
+      "npcs": [],
+      "properties": { "dark": true, "wet": true, "entry_point": true }
+    },
+    "servants_undercroft": {
+      "id": "servants_undercroft",
+      "name": "Servants' Undercroft",
+      "description": "A vaulted stone cellar used for food storage. Barrels of salted meat and wheels of cheese line the walls. A lone kitchen boy sleeps on a sack of flour, snoring loudly. Stairs lead up to the great hall. A wooden door to the south leads back to the sewer entrance. On the wall hangs a servant's livery — a gray tunic and cap that would let you move through the castle unremarked. On a peg beside the livery hangs a large iron key tagged 'Cellar / Chancellor'.",
+      "exits": {
+        "south": { "to": "castle_sewer", "locked": false },
+        "up": { "to": "great_hall", "locked": false, "description": "Stone stairs up to the great hall." }
+      },
+      "items": ["servant_livery", "cellar_key"],
+      "npcs": ["kitchen_boy"],
+      "properties": { "dark": false, "sleeping_guard": false }
+    },
+    "great_hall": {
+      "id": "great_hall",
+      "name": "Great Hall",
+      "description": "A cavernous hall with a high timber ceiling, hung with battle standards. Long trestle tables are set for tomorrow's feast — ironic, given what tomorrow will bring. Two guards patrol in a slow circuit; they are bored and inattentive. A grand staircase climbs to the upper keep. The chancellor's office is through a door to the east, marked with the royal seal. Stairs descend west to the undercroft.",
+      "exits": {
+        "down": { "to": "servants_undercroft", "locked": false },
+        "up": { "to": "upper_keep", "locked": true, "key_item": "upper_keep_key", "description": "The grand staircase, blocked by a locked iron gate." },
+        "east": { "to": "chancellors_office", "locked": true, "key_item": "cellar_key", "description": "The chancellor's office door, sealed with a heavy lock." }
+      },
+      "items": ["upper_keep_key"],
+      "npcs": ["hall_guard"],
+      "properties": { "guarded": true, "torchlit": true }
+    },
+    "chancellors_office": {
+      "id": "chancellors_office",
+      "name": "Chancellor's Office",
+      "description": "A meticulous room — every document in its place, every quill in its stand. The Chancellor clearly prizes order. A large writing desk dominates the center. In the desk's locked drawer sits the Chancellor's seal, used to stamp royal pardons with legal force. A bookcase conceals a hidden compartment that your contact mentioned — it opens when you pull the third book from the left on the top shelf. The door back to the great hall is to the west.",
+      "exits": {
+        "west": { "to": "great_hall", "locked": false }
+      },
+      "items": ["chancellors_seal", "blank_pardon", "ink_and_quill"],
+      "npcs": [],
+      "properties": { "torchlit": true, "hidden_compartment": true }
+    },
+    "upper_keep": {
+      "id": "upper_keep",
+      "name": "Upper Keep Landing",
+      "description": "A stone landing at the top of the grand staircase. Arrow-slit windows look out over the dark courtyard. Two corridors branch: north toward the lord's study, and east toward the chapel. A guard post sits empty — the guard is making rounds. You have perhaps five minutes before he returns.",
+      "exits": {
+        "down": { "to": "great_hall", "locked": false },
+        "north": { "to": "lords_study", "locked": true, "key_item": "study_key", "description": "A heavy oak door with an iron lock leads to Lord Caval's study." },
+        "east": { "to": "castle_chapel", "locked": false, "description": "A corridor leads to the castle chapel." }
+      },
+      "items": [],
+      "npcs": [],
+      "properties": { "torchlit": true }
+    },
+    "lords_study": {
+      "id": "lords_study",
+      "name": "Lord Caval's Study",
+      "description": "A private study hung with maps of the realm, each with troop movements marked in red. Lord Caval's desk is covered in correspondence. In a locked iron strongbox on the desk — which can be opened with the study key — are the treason documents: letters proving Caval's secret alliance with the eastern enemy. A second key hangs on a hook beside the window: this must be for something else in the castle.",
+      "exits": {
+        "south": { "to": "upper_keep", "locked": false }
+      },
+      "items": ["treason_documents", "chapel_passage_key"],
+      "npcs": [],
+      "properties": { "torchlit": true, "strongbox_present": true }
+    },
+    "castle_chapel": {
+      "id": "castle_chapel",
+      "name": "Castle Chapel",
+      "description": "A small stone chapel with stained-glass windows depicting the realm's founding. Pews face an altar lit by votive candles. The atmosphere is peaceful, untouched by the castle's intrigue. Behind the altar, a carved stone panel depicts a knight kneeling — your contact said pressing the knight's shield opens a hidden door. But the door itself requires a key to exit from the other side.",
+      "exits": {
+        "west": { "to": "upper_keep", "locked": false },
+        "north": { "to": "secret_passage", "locked": true, "key_item": "chapel_passage_key", "description": "A hidden door behind the altar, concealed in a stone panel." }
+      },
+      "items": [],
+      "npcs": ["chapel_priest"],
+      "properties": { "candlelit": true, "hidden_door_present": true }
+    },
+    "secret_passage": {
+      "id": "secret_passage",
+      "name": "Secret Passage",
+      "description": "A narrow stone tunnel, damp and low-ceilinged, running through the castle's outer wall. Crude handholds are carved into the stone. The tunnel slopes downward — toward freedom. At the far end, faint starlight is visible.",
+      "exits": {
+        "south": { "to": "castle_chapel", "locked": false },
+        "north": { "to": "secret_passage_exit", "locked": false }
+      },
+      "items": [],
+      "npcs": [],
+      "properties": { "dark": true, "hidden": true }
+    },
+    "chapel_crawlway": {
+      "id": "chapel_crawlway",
+      "name": "Chapel Crawlway",
+      "description": "A stone crawlway running under the chapel's stone floor. Halfway along, a loose flagstone above you can be pushed up — it opens into the chapel itself. At the south end, the tunnel rejoins the castle sewer.",
+      "exits": {
+        "south": { "to": "castle_sewer", "locked": false },
+        "up": { "to": "castle_chapel", "locked": false, "description": "A loose flagstone that can be pushed up into the chapel." }
+      },
+      "items": ["study_key"],
+      "npcs": [],
+      "properties": { "dark": true, "cramped": true }
+    },
+    "secret_passage_exit": {
+      "id": "secret_passage_exit",
+      "name": "Outside the Castle Wall",
+      "description": "You emerge from a concealed exit in a stand of oak trees beyond the castle's eastern wall. The pre-dawn sky is lightening — you have minutes to spare. In the distance, the Resistance camp waits. You carry everything they need. The siege will be called off. The documents will bring Caval down. You have done it.",
+      "exits": {
+        "south": { "to": "secret_passage", "locked": false }
+      },
+      "items": [],
+      "npcs": [],
+      "properties": { "outside": true, "victory_room": true }
+    }
+  },
+  "items": {
+    "spy_kit": {
+      "id": "spy_kit",
+      "name": "Spy Kit",
+      "description": "A leather roll containing lockpicks, a glass cutter, a tiny vial of sleeping draught, and a small knife. Standard infiltration equipment.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["hall_guard", "kitchen_boy"],
+      "use_effect": "You slip a few drops of the sleeping draught into a drink nearby. Within minutes, your target slumps into a deep sleep.",
+      "properties": { "contains_lockpicks": true, "contains_draught": true }
+    },
+    "sewer_map": {
+      "id": "sewer_map",
+      "name": "Sewer Map",
+      "description": "A hand-drawn map of the castle sewers and undercroft, provided by your Resistance contact. Annotations in a cramped hand: 'Cellar key in undercroft unlocks chancellor's office (east door in great hall). Chapel crawlway (north from sewer) connects up into chapel via loose flagstone. Study key hidden in crawlway — left there by our man inside. Upper keep key is on a table in the great hall.'",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "readable": true, "provides_clue": true }
+    },
+    "servant_livery": {
+      "id": "servant_livery",
+      "name": "Servant's Livery",
+      "description": "A plain gray tunic and matching cap. Every servant in Ironhold wears this. Wearing it, you would be effectively invisible to most of the castle's inhabitants.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["hall_guard"],
+      "use_effect": "You don the servant's livery. The guard's eyes pass over you without recognition. Just another face in the castle.",
+      "properties": { "wearable": true, "disguise": true }
+    },
+    "cellar_key": {
+      "id": "cellar_key",
+      "name": "Cellar Key",
+      "description": "A large iron key hanging on a peg in the undercroft. A tag reads 'Cellar / Chancellor'. It appears this key opens both the cellar and the chancellor's office — a cost-cutting measure by the castle steward.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["chancellors_office_door"],
+      "use_effect": "The key turns smoothly. The chancellor's office door swings open.",
+      "properties": {}
+    },
+    "upper_keep_key": {
+      "id": "upper_keep_key",
+      "name": "Upper Keep Key",
+      "description": "A brass key left carelessly on a table in the great hall, perhaps dropped by a guard during the feast preparations. Tagged 'Upper Keep Gate'.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["upper_keep_gate"],
+      "use_effect": "The iron gate at the top of the grand staircase unlocks with a heavy clunk.",
+      "properties": {}
+    },
+    "chancellors_seal": {
+      "id": "chancellors_seal",
+      "name": "Chancellor's Seal",
+      "description": "A heavy brass stamp bearing the royal cipher. Use this seal on the Blank Pardon Form to forge a royal pardon. You must have the Blank Pardon Form in your inventory first.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["blank_pardon"],
+      "use_effect": "You press the seal onto the vellum, leaving a perfect impression of the royal cipher. Combined with the filled-in text, the forged pardon is complete and indistinguishable from the real thing.",
+      "properties": { "official": true }
+    },
+    "blank_pardon": {
+      "id": "blank_pardon",
+      "name": "Blank Pardon Form",
+      "description": "A pre-printed pardon form on heavy vellum. To forge it: first use the Ink and Quill on this form to fill in the text, then use the Chancellor's Seal on this form to stamp it — or use the Chancellor's Seal directly on this form if you already have both. The result will be a Forged Royal Pardon.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["ink_and_quill", "chancellors_seal"],
+      "use_effect": "You fill in the necessary details with careful, practiced handwriting and apply the Chancellor's seal. The forged pardon is complete — indistinguishable from the real thing.",
+      "properties": { "needs_seal": true, "needs_ink": true }
+    },
+    "ink_and_quill": {
+      "id": "ink_and_quill",
+      "name": "Ink and Quill",
+      "description": "A fine quill and a pot of black ink from the chancellor's writing desk. The handwriting samples nearby will help you match the chancellor's script.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["blank_pardon"],
+      "use_effect": "You carefully fill in the blank pardon, mimicking the chancellor's handwriting from the samples on the desk.",
+      "properties": {}
+    },
+    "forged_pardon": {
+      "id": "forged_pardon",
+      "name": "Forged Royal Pardon",
+      "description": "A completed pardon bearing the Chancellor's seal and the proper royal cipher. It will halt the siege — legally and legitimately, at least on paper. Your forgery is perfect.",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "forged": true, "official_appearance": true }
+    },
+    "study_key": {
+      "id": "study_key",
+      "name": "Study Key",
+      "description": "A small iron key hidden in the chapel crawlway, left there by a Resistance sympathizer inside the castle. The tag reads 'Lord's Study'.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["lords_study_door"],
+      "use_effect": "The heavy oak door to the lord's study unlocks.",
+      "properties": {}
+    },
+    "treason_documents": {
+      "id": "treason_documents",
+      "name": "Treason Documents",
+      "description": "A packet of letters in Lord Caval's hand, addressed to General Keth of the Eastern Alliance, detailing plans to betray the realm's border defenses in exchange for territory. Enough to hang him ten times over — and to legitimize everything the Resistance stands for.",
+      "takeable": true,
+      "usable": false,
+      "use_targets": [],
+      "use_effect": "",
+      "properties": { "evidence": true, "valuable": true }
+    },
+    "chapel_passage_key": {
+      "id": "chapel_passage_key",
+      "name": "Chapel Passage Key",
+      "description": "A small, old key hanging on a hook in the lord's study. It is unmarked — but your contact described it: the key to the hidden passage behind the chapel altar. Someone who came before you made sure it would be accessible.",
+      "takeable": true,
+      "usable": true,
+      "use_targets": ["chapel_hidden_door"],
+      "use_effect": "The key fits perfectly. The stone panel swings inward, revealing the secret passage.",
+      "properties": { "old": true }
+    }
+  },
+  "npcs": {
+    "kitchen_boy": {
+      "id": "kitchen_boy",
+      "name": "Sleeping Kitchen Boy",
+      "description": "A young boy of perhaps twelve, fast asleep on a flour sack, using his apron as a blanket. He looks exhausted — long hours in the castle kitchens. He is not a threat, but he might wake if startled.",
+      "persona": "You are a twelve-year-old kitchen boy at Castle Ironhold, utterly exhausted and innocent of all political intrigue. You are half-asleep in the servants' undercroft (basement). If woken gently, you are confused and frightened. The only things you know: (1) the stairs up from this undercroft lead to the great hall; (2) you heard the Chancellor arguing loudly in his office last night — his office is through the east door of the great hall, you saw the key on a peg down here labeled 'Cellar / Chancellor'; (3) there is a loose flagstone in the chapel floor near the back that goes somewhere underground (you found it while cleaning). You do not know about kitchens, sculleries, or any other rooms — you only know this undercroft, the great hall above, and the chapel. You will not raise an alarm if treated kindly.",
+      "initial_state": "sleeping",
+      "current_state": "sleeping",
+      "dialogue": {
+        "greeting": "*stirs, blinks* Wh—? Who's there? I didn't eat the cheese, I swear it...",
+        "default": "*rubs eyes* I don't know anything. I'm just the kitchen boy. Please don't tell Cook I was sleeping.",
+        "states": {
+          "sleeping": "The boy snores softly, dead to the world.",
+          "awake": "The boy is frightened and confused, but not hostile. He will answer simple questions if reassured.",
+          "helpful": "The boy, now calm, shares what little he knows — mostly useful details about the castle's less-guarded corners."
+        }
+      },
+      "gives_item": null,
+      "trigger_state": null
+    },
+    "hall_guard": {
+      "id": "hall_guard",
+      "name": "Great Hall Guard",
+      "description": "A heavyset guard in Ironhold livery, making slow circuits of the great hall. He looks bored and slightly drunk from leftover feast wine. He notices new faces but is susceptible to the servant disguise.",
+      "persona": "You are a castle guard on a late-night shift in the great hall, bored, slightly drunk, and not particularly observant. You are not corrupt but not especially dedicated either. You will question obvious outsiders but accept the servant's livery as sufficient reason not to investigate further. If someone asks for directions, you know only what is in THIS hall: stairs down to the undercroft (west/down), grand staircase up to the upper keep (locked gate, the key is on that table over there — the captain left it), and the chancellor's office through the east door (it's locked, the cellar key opens it — same key used downstairs). You do not know about any other rooms. You will become suspicious if you see someone stealing or entering restricted areas without livery.",
+      "initial_state": "patrolling",
+      "current_state": "patrolling",
+      "dialogue": {
+        "greeting": "Oi. What are you doing in here at this hour? Feast's not 'til tomorrow.",
+        "default": "Move along. I've got rounds to finish.",
+        "states": {
+          "patrolling": "The guard eyes newcomers with mild suspicion but does not act unless provoked.",
+          "distracted": "The guard has been given the sleeping draught and is fighting to stay awake, paying no attention to anything.",
+          "sleeping": "The guard is slumped against the wall, snoring."
+        }
+      },
+      "gives_item": null,
+      "trigger_state": null
+    },
+    "chapel_priest": {
+      "id": "chapel_priest",
+      "name": "Father Donn",
+      "description": "An elderly priest in white vestments, keeping a late vigil at the chapel altar. He has lived in this castle for forty years and knows every stone of it. He is not an ally of Caval — he has watched too much cruelty — but his first loyalty is to his faith and his duty of care.",
+      "persona": "You are Father Donn, an elderly castle chaplain who has watched Lord Caval's tyranny grow for a decade. You are not a Resistance member but you are sympathetic, and you are wise enough to know when history is being made. You will not actively help a stranger but you will not hinder one either — you have taken a vow not to lie, but you find ways to not answer questions directly. You know about the hidden passage behind the altar and that it requires a key. If the agent mentions the Resistance or shows evidence of Caval's crimes, you will tell them that 'the knight's shield, when pressed, opens what was meant to be opened' — pointing to the carved stone panel. You speak in the measured cadence of a man who has given many sermons.",
+      "initial_state": "vigil",
+      "current_state": "vigil",
+      "dialogue": {
+        "greeting": "This is a house of peace. Whatever burden brought you here at this hour, you are welcome to rest a moment. I ask only that you mean no harm to those under this roof.",
+        "default": "I have seen much in forty years in this castle. I have learned that some questions are better answered by looking carefully at what is already before you.",
+        "states": {
+          "vigil": "Father Donn kneels in quiet prayer, aware of the agent's presence but not interrupting his devotions.",
+          "engaged": "The priest speaks carefully, offering oblique guidance without compromising his vows.",
+          "revealed": "Having been shown evidence of Caval's treason, Father Donn's expression settles into something like relief. 'Then let me tell you about the knight on the wall.'"
+        }
+      },
+      "gives_item": null,
+      "trigger_state": null
+    }
+  },
+  "events": {
+    "pardon_forged": {
+      "id": "pardon_forged",
+      "description": "The blank pardon is stamped with the Chancellor's seal, becoming a forged royal pardon (added directly to inventory by tools.py).",
+      "trigger": {
+        "type": "item_used",
+        "item_id": "chancellors_seal"
+      },
+      "effects": []
+    },
+    "priest_reveals_passage": {
+      "id": "priest_reveals_passage",
+      "description": "Father Donn, shown the treason documents, reveals the mechanism of the hidden passage.",
+      "trigger": {
+        "type": "item_used",
+        "item_id": "treason_documents"
+      },
+      "effects": [
+        {
+          "type": "change_npc_state",
+          "npc_id": "chapel_priest",
+          "new_state": "revealed"
+        }
+      ]
+    }
+  }
+}
